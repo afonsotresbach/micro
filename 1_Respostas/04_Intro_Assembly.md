@@ -13,36 +13,86 @@ Utilize os registradores R11, R12, R13, R14 e R15 para armazenar valores tempor�
 
 (a) `f = 0;`
 
+`mov.w #0, R4` ou `mov.w R3, R4`
+
 (b) `g++;`
+
+`add.w #1, R5` ou `add.w &R3, R5`
 
 (c) `h--;`
 
+`sub.w #1, R5` ou `sub.w &R3, R5`
+
 (d) `i += 2;`
 
+`add.w #2, R5` ou `add.w @R3, R5`
+
 (e) `j -= 2;`
+
+`sub.w #2, R5` ou `sub.w @R3, R5`
 
 2. Traduza as seguintes linhas em C para a linguagem assembly do MSP430. Utilize somente as seguintes instruções: mov.w, add.w, sub.w, clr.w, dec.w, decd.w, inc.w e incd.w.
 
 (a) `f = 0;`
 
+`clr.w R4`
+
 (b) `g++;`
+
+`inc.w R5`
 
 (c) `h--;`
 
+`dec.w R6`
+
 (d) `i += 2;`
 
+`incd.w R7`
+
 (e) `j -= 2;`
+
+`decd.w R8`
 
 3. Traduza as seguintes linhas em C para a linguagem assembly do MSP430. Utilize somente as seguintes instruções: mov.w, add.w, sub.w, clr.w, dec.w, decd.w, inc.w e incd.w.
 
 (a) `f *= 2;`
 
+`add.w R5, R5`
+
 (b) `g *= 3;`
+
+```
+mov.w R6, R11
+add.w R11, R6
+add.w R11, R6
+
+```
 
 (c) `h *= 4;`
 
+```
+add.w R7, R7
+add.w R7, R7
+```
+
 (d) `A[2] = A[1] + A[0];`
 
+```
+mov.w 1(R9), 2(R9)
+add.w 0(R9), 2(R9)
+```
+
+
 (e) `A[3] = 2*f - 4*h;`
+```
+mov.w R
+```
 
 (f) `A[3] = 2*(f - 2*h);`
+
+```
+mov.w R5, 3(R9)
+sub.w R6, 3(R9)
+sub.w R6, 3(R9)
+add.w 3(R9), 3(R9)
+```
