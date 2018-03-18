@@ -25,7 +25,7 @@ else f = g-h-10;
 3. "Traduza" o seguinte trecho de código em C para o assembly do MSP430:
 
 ```C
-while(save[i]!=k) i++;
+while(A[i]!=j) i++;
 ```
 
 4. "Traduza" o seguinte trecho de código em C para o assembly do MSP430:
