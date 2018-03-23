@@ -31,8 +31,10 @@ Utilize os registradores R11, R12, R13, R14 e R15 para armazenar valores tempor�
 
 (f) Inverter o nibble mais significativo de R10, e setar o nibble menos significativo de R10. 
 
-`inv.w #f000, R10`
-`bis.w #000f, R10`
+```
+inv.w #f000, R10
+bis.w #000f, R10
+```
 
 2. "Traduza" o seguinte trecho de código em C para o assembly do MSP430:
 
@@ -52,6 +54,7 @@ i_maior_j:
     add.w R6, R4
     add.w #a, R4
 continua:
+```
     
 3. "Traduza" o seguinte trecho de código em C para o assembly do MSP430:
 
@@ -59,6 +62,7 @@ continua:
 while(A[i]!=j) i++;
 ```
 
+```
 mov.w R9, R11
 while:
     cmp   @R11+, R8
@@ -66,7 +70,6 @@ while:
     inc.w R7
     jmp   while
 end:
-	...
 ```
 
 4. "Traduza" o seguinte trecho de código em C para o assembly do MSP430:
