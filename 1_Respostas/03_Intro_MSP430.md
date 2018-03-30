@@ -1,4 +1,4 @@
-1. Dada uma variável `a` do tipo `char` (um byte), escreva os trechos de código em C para:
+﻿1. Dada uma variável `a` do tipo `char` (um byte), escreva os trechos de código em C para:
 
 (a) Somente setar o bit menos significativo de `a`.
 
@@ -31,21 +31,21 @@ a |= (BIT3 | BIT2 | BIT1 | BIT0);
 
 ```C
 #include <msp430g2553.h>
-#define LEDS BIT0 | BIT6
+#define LEDS (BIT0 | BIT6)
 
 void main(void)
 {
 
-    volatile int i;
+    volatile unsigned int i;
 
-	WDTCTL = WDTPW | WDTHOLD;
-	P1OUT &= ~LEDS;
-	P1DIR |= LEDS;
+    WDTCTL = WDTPW | WDTHOLD;
+    P1OUT &= ~LEDS;
+    P1DIR |= LEDS;
 
     while (1) {
         P1OUT ^= LEDS;
 
-        for (i = 0; i < 1000; i++);
+        for (i = 0xffff; i > 0; i--);
     }
 
 }
@@ -54,25 +54,28 @@ void main(void)
 3. Considerando a placa Launchpad do MSP430, escreva o código em C para piscar duas vezes os dois LEDs sempre que o usuário pressionar o botão.
 ```C
 #include <msp430g2553.h>
-#define LEDS BIT0 | BIT6
-#define BTN BIT1
+#define LEDS (BIT0 | BIT6)
+#define BTN BIT3
 
 void main(void)
 {
 
-    volatile int i, j;
+    volatile unsigned int i, j;
 
-	WDTCTL = WDTPW | WDTHOLD;
+    WDTCTL = WDTPW | WDTHOLD;
     P1DIR |= LEDS;
-	P1DIR &= ~BTN;
-	P1REN |= BTN;
+    P1OUT &= ~LEDS;
+    P1DIR &= ~BTN;
+    P1REN |= BTN;
 
-    while (P1IN & BTN);
+    while (1) {
+        while (P1IN & BTN);
 
-    for (j = 0; j < 4; j++) {
-        P1OUT ^= LEDS;
+        for (j = 4; j > 0; j--) {
+            P1OUT ^= LEDS;
 
-        for (i = 0; i < 1000; i++);
+            for (i = 0xc000; i > 0; i--);
+        }
     }
 
 }
@@ -80,39 +83,34 @@ void main(void)
 
 4. Considerando a placa Launchpad do MSP430, faça uma função em C que pisca os dois LEDs uma vez.
 ```C
-void pisca(int vezes)
+void pisca(unsigned int j)
 {
 
-    volatile int i, j;
+    volatile unsigned int i;
 
-    vezes *= 2;
-
-    for (j = 0; j < vezes; j++) {
+    for (j *= 2; j > 0; j--) {
         P1OUT ^= LEDS;
 
-        for (i = 0; i < 1000; i++);
+        for (i = 0xffff; i > 0; i--);
     }
-
 }
 ```
 
 5. Reescreva o código da questão 2 usando a função da questão 4.
 ```C
 #include <msp430g2553.h>
-#define LEDS BIT0 | BIT6
+#define LEDS (BIT0 | BIT6)
 
 void main(void)
 {
 
-    volatile int i;
+    volatile unsigned int i;
 
-    WDT = ;
-    P1DIR |= LEDS;
+    WDTCTL = WDTPW | WDTHOLD;
     P1OUT &= ~LEDS;
+    P1DIR |= LEDS;
 
-    while (1) {
-        pisca(1);
-    }
+    pisca(1);
 
 }
 ```
@@ -121,20 +119,24 @@ void main(void)
 ```C
 #include <msp430g2553.h>
 #define LEDS BIT0 | BIT6
-#define BTN BIT1
+#define BTN BIT3
 
 void main(void)
 {
 
-    volatile int i, j;
+    volatile unsigned int i;
 
+    WDTCTL = WDTPW | WDTHOLD;
     P1DIR |= LEDS;
+    P1OUT &= ~LEDS;
     P1DIR &= ~BTN;
     P1REN |= BTN;
 
-    while (P1IN & BTN);
-
-    pisca(2);
+    while (1) {
+        while (P1IN & BTN);
+        pisca(2);
+        for (i = 0xc000; i > 0; i--);
+    }
 
 }
 ```

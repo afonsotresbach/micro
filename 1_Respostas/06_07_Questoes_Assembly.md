@@ -12,6 +12,12 @@ O protótipo da função é:
 unsigned int Raiz_Quadrada(unsigned int S);
 ```
 
+```C
+unsigned int Raiz_Quadrada(unsigned int S)
+{
+}
+```
+
 (b) Escreva a sub-rotina equivalente na linguagem Assembly do MSP430. A variável `S` é fornecida pelo registrador R15, e a raiz quadrada de `S` (ou seja, a variável `x`) é fornecida pelo registrador R15 também.
 
 2. (a) Escreva uma função em C que calcule `x` elevado à `N`-ésima potência, seguindo o seguinte protótipo: 
@@ -20,7 +26,55 @@ unsigned int Raiz_Quadrada(unsigned int S);
 int Potencia(int x, int N);
 ```
 
+```C
+int Potencia(int x, int N)
+{
+    if (0 == N) {
+        return 1;
+    }
+
+    if (1 == N || 0 == x) {
+        return x;
+    }
+
+    return x * Potencia(x, N - 1);
+}
+```
+
 (b) Escreva a sub-rotina equivalente na linguagem Assembly do MSP430. `x` e `n` são fornecidos através dos registradores R15 e R14, respectivamente, e a saída deverá ser fornecida no registrador R15.
+```
+potencia:
+    tst.w   R14
+    jnz.w   not_zero
+    mov.w   #1, R15
+    ret
+n_not_zero:
+    tst.w   R15
+    jz      n_one_or_x_zero
+    cmp.w   #1, R14
+    jz      n_one_or_x_zero
+    push.w  R15
+    dec.w   R14
+    call    potencia
+    pop.w   R14
+    call    mult
+n_one_or_x_zero:
+    ret
+
+mult:
+    tst.w   R14
+    jnz     zero
+    clr.w   R15
+    ret
+not_zero:
+    push.w  R15
+    dec.w   R14
+    call    mult
+    pop.w   R14
+    add.w   R14, R15
+    ret
+```
+
 
 3. Escreva uma sub-rotina na linguagem Assembly do MSP430 que calcula a divisão de `a` por `b`, onde `a`, `b` e o valor de saída são inteiros de 16 bits. `a` e `b` são fornecidos através dos registradores R15 e R14, respectivamente, e a saída deverá ser fornecida através do registrador R15.
 
@@ -58,6 +112,21 @@ Se o vetor for palíndromo, retorne o valor 1. Caso contrário, retorne o valor 
 
 ```C
 int Palindromo(int vetor[ ], int tamanho);
+```
+
+```C
+int Palindromo(int vetor[ ], int tamanho)
+{
+    int i;
+
+    for (i = tamanho / 2; i >= 0; i --) {
+        if (vetor[i] != vetor[tamanho - 1 - i]) {
+            return 0;
+        }
+    }
+
+    return 1;
+}
 ```
 
 (b) Escreva a sub-rotina equivalente na linguagem Assembly do MSP430. O endereço do vetor de entrada é dado pelo registrador R15, o tamanho do vetor é dado pelo registrador R14, e o resultado é dado pelo registrador R15.
